@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { 
+    font-family: system-ui, -apple-system, sans-serif; 
+  }
+  
+  body { 
+    @apply bg-gray-900 text-gray-100 min-h-screen antialiased;
+  }
+
+  /* Animações custom */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-slideDown {
+    animation: slideDown 0.2s ease-out;
+  }
+}
+
+/* Tema claro */
+.light body {
+  @apply bg-white text-gray-900;
+}
+
+/* Só ajusta fundo e borda; sem mexer em text-gray-* pra evitar loop */
+.light .bg-gray-900 { @apply bg-white; }
+.light .bg-gray-800 { @apply bg-gray-50; }
+.light .bg-gray-900\/60 { @apply bg-gray-100; }
+.light .border-gray-800 { @apply border-gray-200; }
+.light .border-gray-700 { @apply border-gray-300; }
