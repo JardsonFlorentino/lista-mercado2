@@ -4,9 +4,6 @@ import { ItemForm } from "./components/ItemForm";
 import { ItemList } from "./components/ItemList";
 
 const STORAGE_KEY = "market-lists-v2";
-const THEME_KEY = "market-app-theme";
-
-type Theme = "light" | "dark";
 
 type AppState = {
   mode: AppMode;
@@ -28,14 +25,6 @@ function loadInitialLists(): MarketList[] {
   } catch {
     return [];
   }
-}
-
-function loadInitialTheme(): Theme {
-  if (typeof window === "undefined") return "dark";
-  const stored = window.localStorage.getItem(THEME_KEY);
-  if (stored === "light" || stored === "dark") return stored;
-  const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)").matches;
-  return prefersDark ? "dark" : "light";
 }
 
 function buildListText(list: MarketList): string {
@@ -78,8 +67,6 @@ function App() {
     isAddingItemInView: false,
   }));
 
-  const [theme, setTheme] = useState<Theme>(() => loadInitialTheme());
-
   useEffect(() => {
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state.lists));
@@ -87,18 +74,6 @@ function App() {
       // ignore localStorage error
     }
   }, [state.lists]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const root = document.documentElement;
-    root.classList.remove("light", "dark");
-    root.classList.add(theme);
-    window.localStorage.setItem(THEME_KEY, theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
-  };
 
   // --- Navegação ---
   const goHome = () =>
@@ -239,7 +214,6 @@ function App() {
     );
   };
 
-  // Deixar o ItemForm visível (modo adicionar item) dentro da tela View
   const openAddItemInView = () => {
     setState((prev) => ({
       ...prev,
@@ -254,13 +228,11 @@ function App() {
     }));
   };
 
-  // Admitir um novo item direto na lista aberta (modo view)
   const handleAddItemInView = (item: MarketItem) => {
     updateCurrentListItems((items) => [...items, item]);
     closeAddItemInView();
   };
 
-  // Duplicar lista
   const handleDuplicateList = (id: string) => {
     const original = state.lists.find((l) => l.id === id);
     if (!original) return;
@@ -280,7 +252,6 @@ function App() {
     }));
   };
 
-  // Apagar lista
   const handleDeleteList = (id: string) => {
     setState((prev) => {
       const isCurrent = prev.currentListId === id;
@@ -294,7 +265,6 @@ function App() {
     });
   };
 
-  // Resetar tudo (apagar todas as listas)
   const handleResetAll = () => {
     if (confirm("Tem certeza que deseja apagar todas as listas?")) {
       setState({
@@ -309,7 +279,6 @@ function App() {
     }
   };
 
-  // Exportar/copiar lista atual em texto
   const handleExportCurrentList = async () => {
     const current = state.lists.find((l) => l.id === state.currentListId);
     if (!current) return;
@@ -327,18 +296,10 @@ function App() {
   // HOME
   if (state.mode === "home") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900/70 via-blue-900 to-gray-900 px-4 py-6">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900/20 via-blue-900 to-gray-900 px-4 py-6">
         <main className="mx-auto w-full max-w-md">
           <div className="bg-gray-900/80 border border-gray-800 rounded-3xl shadow-2xl px-6 py-6 md:px-8 md:py-8">
             <header className="text-center mb-6 relative">
-              <button
-                type="button"
-                onClick={toggleTheme}
-                className="absolute right-0 -top-2 text-xl text-gray-400 hover:text-gray-200"
-                aria-label="Alternar tema claro/escuro"
-              >
-                {theme === "dark" ? "🌙" : "☀️"}
-              </button>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent mb-2">
                 🛒 Lista de Mercado
               </h1>
@@ -436,10 +397,11 @@ function App() {
           </div>
         </main>
 
-        {/* Footer em card fixo */}
+        {/* Footer em barra fixa ocupando toda a largura */}
         <div className="fixed bottom-0 left-0 right-0">
           <div className="w-full bg-gray-900/95 border-t border-gray-800 px-4 py-2 text-center text-[11px] text-gray-400 backdrop-blur-sm">
-            Lista de Mercado – Uso pessoal - Desenvolvido por Jardson Florentino com TypeScript & React.
+            Lista de Mercado – Uso pessoal - Desenvolvido por Jardson Florentino
+            com TypeScript & React.
           </div>
         </div>
       </div>
@@ -549,14 +511,6 @@ function App() {
                 >
                   ← Voltar para Home
                 </button>
-                <button
-                  type="button"
-                  onClick={toggleTheme}
-                  className="text-lg text-gray-400 hover:text-gray-200"
-                  aria-label="Alternar tema claro/escuro"
-                >
-                  {theme === "dark" ? "🌙" : "☀️"}
-                </button>
               </div>
               <h2 className="text-2xl font-bold text-blue-400">
                 {current.name}
@@ -654,7 +608,7 @@ function App() {
     );
   }
 
-  // EDIT (placeholder para futura config avançada)
+  // EDIT
   if (state.mode === "edit") {
     const current = state.lists.find((l) => l.id === state.currentListId);
 
