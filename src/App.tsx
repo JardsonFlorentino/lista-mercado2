@@ -437,8 +437,8 @@ function App() {
         </main>
 
         {/* Footer em card fixo */}
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2">
-          <div className="bg-gray-900/90 border border-gray-800 rounded-full px-4 py-2 shadow-lg text-[11px] text-gray-400 backdrop-blur-sm">
+        <div className="fixed bottom-0 left-0 right-0">
+          <div className="w-full bg-gray-900/95 border-t border-gray-800 px-4 py-2 text-center text-[11px] text-gray-400 backdrop-blur-sm">
             Lista de Mercado – Uso pessoal - Desenvolvido por Jardson Florentino com TypeScript & React.
           </div>
         </div>
