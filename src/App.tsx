@@ -327,7 +327,7 @@ function App() {
   // HOME
   if (state.mode === "home") {
     return (
-      <div className="min-h-screen flex flex-col justify-center bg-gradient-to-br from-gray-900 via-blue-900/20 to-gray-900 px-4 py-6">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900/70 via-blue-900 to-gray-900 px-4 py-6">
         <main className="mx-auto w-full max-w-md">
           <div className="bg-gray-900/80 border border-gray-800 rounded-3xl shadow-2xl px-6 py-6 md:px-8 md:py-8">
             <header className="text-center mb-6 relative">
@@ -436,10 +436,12 @@ function App() {
           </div>
         </main>
 
-        <footer className="text-center text-xs text-gray-600 p-3 select-none">
-          Lista de Mercado – Uso pessoal - Desenvolvido por Jardson Florentino
-          com TypeScript & React.
-        </footer>
+        {/* Footer em card fixo */}
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2">
+          <div className="bg-gray-900/90 border border-gray-800 rounded-full px-4 py-2 shadow-lg text-[11px] text-gray-400 backdrop-blur-sm">
+            Lista de Mercado – Uso pessoal - Desenvolvido por Jardson Florentino com TypeScript & React.
+          </div>
+        </div>
       </div>
     );
   }
